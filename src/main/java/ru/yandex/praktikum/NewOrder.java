@@ -50,6 +50,17 @@ public class NewOrder {
         checkOrderScooter(firstOrderButton, name, secondName, address, phone, rentData, comment);
     }
 
+    public void checkOrderScooterSecondWay(
+            String name,
+            String secondName,
+            String address,
+            long phone,
+            String rentData,
+            String comment
+    ) {
+        checkOrderScooter(secondOrderButton, name, secondName, address, phone, rentData, comment);
+    }
+
     private void checkOrderScooter(By orderScooterButton,
                                    String name,
                                    String secondName,

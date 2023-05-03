@@ -12,24 +12,27 @@ import java.util.List;
 
 public class DropDownList {
     private WebDriver driver;
-
-    @Test
-    public void DropDownList() {
+    @Before
+    public void startUp() {
+        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage");
         driver = new ChromeDriver(options);
+
+    }
+
+    @Test
+    public void DropDownList() {
 
         driver.get("https://qa-scooter.praktikum-services.ru/");
 
         ImportantQuestions importantQuestions = new ImportantQuestions(driver, getExpectedAccordionsText());
 
+        importantQuestions.checkImportantQuestionsTextSize();
+        importantQuestions.checkImportantQuestionsTextAvailability();
         importantQuestions.checkImportantQuestionsText();
     }
 
-    @Before
-    public void startUp() {
-        WebDriverManager.chromedriver().setup();
-    }
 
     @After
     public void tearDown() {

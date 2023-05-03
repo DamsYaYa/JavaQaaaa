@@ -59,4 +59,48 @@ public class NewOrderTest {
         driver.quit();
     }
 
+    public void testSecondWayOrderScooterInChrome(){
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage");
+        WebDriver driver = new ChromeDriver(options);
+
+        driver.get("https://qa-scooter.praktikum-services.ru/");
+
+        NewOrder newOrder = new NewOrder(driver);
+
+        newOrder.checkOrderScooterSecondWay(
+                "Алена",
+                "Петрова",
+                "москва ул минская дом 34",
+                899988777,
+                "28.04.2023",
+                "не звонить в домофон"
+        );
+
+        driver.quit();
+    }
+
+    @Test
+    public void testSecondWayOrderScooterInFirefox(){
+        WebDriverManager.firefoxdriver().setup();
+
+        WebDriver driver = new FirefoxDriver();
+
+        driver.get("https://qa-scooter.praktikum-services.ru/");
+
+        NewOrder newOrder = new NewOrder(driver);
+
+        newOrder.checkOrderScooterSecondWay(
+                "Марья",
+                "Васильева",
+                "деревня Петушки дом первый от въезда",
+                892990545,
+                "30.05.2023",
+                "ты меня сразу узнаешь"
+        );
+
+        driver.quit();
+    }
+
 }

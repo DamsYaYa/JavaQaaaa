@@ -20,13 +20,23 @@ public class ImportantQuestions {
         this.expectedAccordionsText = expectedAccordionsText;
     }
 
-    public void checkImportantQuestionsText() {
+    public void checkImportantQuestionsTextSize() {
         List<WebElement> elements = driver.findElements(accordions);
 
         Assert.assertEquals("Number of accordions must be the equals", expectedAccordionsText.size(), elements.size());
 
+        }
+    public void checkImportantQuestionsTextAvailability() {
+        List<WebElement> elements = driver.findElements(accordions);
+
         for (int i = 0; i < elements.size(); ++i) {
             checkAccordion(i);
+        }
+    }    public void checkImportantQuestionsText() {
+        List<WebElement> elements = driver.findElements(accordions);
+
+        for (int i = 0; i < elements.size(); ++i) {
+            checkAccordionText(i);
         }
     }
 
@@ -37,6 +47,13 @@ public class ImportantQuestions {
         clickAccordionButton(accordionButton);
         waitForEnableAccordionPanel(accordionPanel);
         checkEnableAccordionPanel(accordionPanel);
+        checkEqualsAccordionPanelText(accordionPanel, expectedAccordionsText.get(index));
+    }
+
+    private void checkAccordionText(int index) {
+
+        By accordionPanel = By.id("accordion__panel-" + index);
+
         checkEqualsAccordionPanelText(accordionPanel, expectedAccordionsText.get(index));
     }
 
