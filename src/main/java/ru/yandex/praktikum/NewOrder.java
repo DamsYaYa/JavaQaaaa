@@ -2,7 +2,6 @@ package ru.yandex.praktikum;
 
 import org.junit.Assert;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,9 +10,9 @@ import java.util.List;
 public class NewOrder {
     private final WebDriver driver;
 
+    private static final String URL = "https://qa-scooter.praktikum-services.ru/";
     private By firstOrderButton  =  By.xpath("//button[text()='Заказать']"); //first button for ordering
     private By secondOrderButton = By.className("Button_Button__ra12g");
-
     private By orderContent = By.className("Order_Content__bmtHS");
     private By clientName = By.xpath("//input[@placeholder='* Имя']");
     private By clientSecondName = By.xpath("//input[@placeholder='* Фамилия']");
@@ -21,150 +20,91 @@ public class NewOrder {
     private By clientMetroStation = By.xpath("//input[@placeholder='* Станция метро']");
     private By clientPhone = By.xpath("//input[@placeholder='* Телефон: на него позвонит курьер']");
     private By nextButton = By.xpath("//button[text()='Далее']");
-
     private By rentContent = By.className("Order_Content__bmtHS");
-
     private By clientRentData = By.xpath("//input[@placeholder='* Когда привезти самокат']");
+    private static final By datePicker = By.xpath(".//div[@class='react-datepicker__week]");
     private By clientRentPeriod = By.className("Dropdown-control");
-    private By scooterColor = By.id("black");
-
-    private By courierComment = By.xpath("//input[@placeholder='Комментарий для курьера']");
-
-    private By orderButton = By.className("Button_Button__ra12g");
-
+    private By choosingRentalPeriod = By.xpath(".//div[@class='Dropdown-option']");
+    private By scooterColor = By.xpath(".//div[@class='Order_Checkboxes__31WSI]");
+    private By choosingScootersColor = By.xpath(".//input[@class='Checkbox_Input__14A2w']");
+    private By CommentForCourier = By.xpath("//input[@placeholder='Комментарий для курьера']");
     private By modalHeader = By.className("Order_ModalHeader__3FDaJ");
+    private By metroStationList = By.xpath(".//li[@class='select-search__row']");
+    private static final By orderButton = By.xpath(".//div[@class='Order_Buttons__1xGrp']/button[text() = 'Заказать']");
+    private static final By orderConfirmation = By.xpath(".//div[@class='Order_Buttons__1xGrp']/button[text() = 'Да']");
+    private static final By successfulOrder = By.xpath(".//div[@class='Order_ModalHeader__3FDaJ' and text() = 'Заказ оформлен']");
+    private static final By finalOrderButton = By.xpath(".//button[text() = 'Заказать']");
 
     public NewOrder(WebDriver driver) {
         this.driver = driver;
     }
 
-
-    public void checkOrderScooterFirstWay(
-            String name,
-            String secondName,
-            String address,
-            long phone,
-            String rentData,
-            String comment
-    ) {
-        checkOrderScooter(firstOrderButton, name, secondName, address, phone, rentData, comment);
+    public void openAWebsiteToOrderAScooter() {
+        driver.get(URL);
     }
-
-    public void checkOrderScooterSecondWay(
-            String name,
-            String secondName,
-            String address,
-            long phone,
-            String rentData,
-            String comment
-    ) {
-        checkOrderScooter(secondOrderButton, name, secondName, address, phone, rentData, comment);
-    }
-
-    private void checkOrderScooter(By orderScooterButton,
-                                   String name,
-                                   String secondName,
-                                   String address,
-                                   long phone,
-                                   String rentData,
-                                   String comment) {
-        clickOrderScooterButton(orderScooterButton);
-        waitOrderContentVisible();
-
-        setClientName(name);
-        setClientSecondName(secondName);
-        setClientAddress(address);
-        setClientPhone(phone);
-        setClientMetroStation();
-
-        clickNextButton();
-
-        waitRentContentVisible();
-        setClientRentDate(rentData);
-        setClientRentPeriod();
-        setScooterColor();
-        setCourierComment(comment);
-        clickOrderButton();
-        waitModalHeaderVisible();
-        checkModalHeaderVisible();
-    }
-
-    private void clickOrderScooterButton(By orderScooterButton) {
-        driver.findElement(orderScooterButton).click();
-    }
-
-    private void waitOrderContentVisible() {
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.visibilityOfElementLocated(orderContent));
-    }
-
-    private void setClientName(String name) {
+    public void fillInTheNameField(String name) {
+        driver.findElement(clientName).clear();
         driver.findElement(clientName).sendKeys(name);
     }
-
-    private void setClientSecondName(String secondName) {
-        driver.findElement(clientSecondName).sendKeys(secondName);
+    public void fillInTheLastNameField(String surname) {
+        driver.findElement(clientSecondName).clear();
+        driver.findElement(clientSecondName).sendKeys(surname);
     }
-
-    private void setClientAddress(String address) {
+    public void fillInTheAddressField(String address) {
+        driver.findElement(clientAddress).clear();
         driver.findElement(clientAddress).sendKeys(address);
     }
-
-    private void setClientMetroStation() {
-        WebElement element = driver.findElement(clientMetroStation);
-        JavascriptExecutor jse = (JavascriptExecutor)driver;
-        jse.executeScript("arguments[0].value='Кропоткинская';", element);
+    public void chooseAMetroStation(int metroStationIdx) {
+        driver.findElement(clientMetroStation).click();
+        List<WebElement> list = driver.findElements(metroStationList);
+        WebElement e = list.get(metroStationIdx);
+        e.click();
     }
-
-    private void setClientPhone(long phone) {
-        driver.findElement(clientPhone).sendKeys(String.valueOf(phone));
+    public void fillInThePhoneNumberField(String phoneNumber) {
+        driver.findElement(clientPhone).clear();
+        driver.findElement(clientPhone).sendKeys(phoneNumber);
     }
-
-    private void clickNextButton() {
-        WebElement element = driver.findElement(nextButton);
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-
-        try{
-            element.click();
-        }catch (WebDriverException e){
-            JavascriptExecutor executor = (JavascriptExecutor)driver;
-            executor.executeScript("arguments[0].click()", element);
-        }
-    }
-
-    private void waitRentContentVisible() {
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.visibilityOfElementLocated(rentContent));
-    }
-
-    private void setClientRentDate(String rentDate) {
-        driver.findElement(clientRentData).sendKeys(rentDate);
-    }
-
-    private void setClientRentPeriod() {
-        List<WebElement> li = driver.findElements(clientRentPeriod);;
-        li.get(0).click();
-    }
-
-    private void setScooterColor() {
-        driver.findElement(scooterColor).click();
-    }
-
-    private void setCourierComment(String comment) {
-        driver.findElement(courierComment).sendKeys(comment);
-    }
-
-    private void clickOrderButton() {
+    public void clickOnTheNextButton() {
         driver.findElement(orderButton).click();
     }
-
-    private void waitModalHeaderVisible() {
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.visibilityOfElementLocated(modalHeader));
+    public void selectTheOrderDate(int orderDateIdx) {
+        driver.findElement(clientRentData).click();
+        List<WebElement> list = driver.findElements(datePicker);
+        WebElement a = list.get(orderDateIdx);
+        a.click();
     }
+    public void selectTheRentalPeriod(int rentalPeriodIdx) {
+        driver.findElement(clientRentPeriod).click();
+        List<WebElement> list = driver.findElements(choosingRentalPeriod);
+        WebElement b = list.get(rentalPeriodIdx);
+        b.click();
+    }
+    public void chooseTheColorOfTheScooter(int colorOfTheScooterIdx) {
+        driver.findElement(scooterColor).click();
+        List<WebElement> list = driver.findElements(choosingScootersColor);
+        WebElement c = list.get(colorOfTheScooterIdx);
+        c.click();
+    }
+    public void leaveACommentToTheCourier(String comment) {
+        driver.findElement(CommentForCourier).clear();
+        driver.findElement(CommentForCourier).sendKeys(comment);
 
-    private void checkModalHeaderVisible(){
-        Assert.assertTrue(driver.findElement(modalHeader).isDisplayed());
+    }
+    public void clickTheOrderButtonOnTheOrderPage() {
+        driver.findElement(orderButton).click();
+
+    }
+    public void confirmTheOrder() {
+        driver.findElement(orderConfirmation).click();
+
+    }
+    public boolean isSuccessfulMessageAppeared() {
+        return driver.findElement(successfulOrder).isDisplayed();
+    }
+    public void clickOrderButton(int orderButtonIdx) {
+        List<WebElement> list = driver.findElements(finalOrderButton);
+        WebElement button = list.get(orderButtonIdx);
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", button);
+        button.click();
     }
 }
