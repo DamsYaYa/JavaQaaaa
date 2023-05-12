@@ -12,10 +12,13 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.GeckoDriverService;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import sun.jvm.hotspot.utilities.soql.JSJavaScriptEngine;
+
+
 
 public class NewOrderTest {
     @Test
-    public void testFirstWayOrderScooterInChrome(){
+    public void testFirstWayOrderScooterInChrome() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage");
@@ -33,9 +36,14 @@ public class NewOrderTest {
                 "28.04.2023",
                 "не звонить в домофон"
         );
+    }
 
+    @After
+    public void teardown(){
         driver.quit();
     }
+
+
 
     @Test
     public void testFirstWayOrderScooterInFirefox(){
@@ -55,9 +63,13 @@ public class NewOrderTest {
                 "30.05.2023",
                 "ты меня сразу узнаешь"
         );
+    }
 
+    @After
+    public void teardown(){
         driver.quit();
     }
+
 
     public void testSecondWayOrderScooterInChrome(){
         WebDriverManager.chromedriver().setup();
@@ -99,7 +111,10 @@ public class NewOrderTest {
                 "30.05.2023",
                 "ты меня сразу узнаешь"
         );
+    }
 
+    @After
+    public void teardown(){
         driver.quit();
     }
 
