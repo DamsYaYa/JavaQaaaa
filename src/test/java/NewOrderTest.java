@@ -17,6 +17,9 @@ import sun.jvm.hotspot.utilities.soql.JSJavaScriptEngine;
 
 
 public class NewOrderTest {
+
+    private WebDriver driver;
+
     @Test
     public void testFirstWayOrderScooterInChrome() {
         WebDriverManager.chromedriver().setup();
@@ -36,11 +39,6 @@ public class NewOrderTest {
                 "28.04.2023",
                 "не звонить в домофон"
         );
-    }
-
-    @After
-    public void teardown(){
-        driver.quit();
     }
 
 
@@ -66,7 +64,7 @@ public class NewOrderTest {
     }
 
     @After
-    public void teardown(){
+    public void tearDown() {
         driver.quit();
     }
 
@@ -89,9 +87,9 @@ public class NewOrderTest {
                 "28.04.2023",
                 "не звонить в домофон"
         );
-
-        driver.quit();
     }
+
+
 
     @Test
     public void testSecondWayOrderScooterInFirefox(){
